@@ -6,8 +6,8 @@ import numpy as np
 mydb = mysql.connector.connect(
   host='localhost',
   user='root',
-  password='your_password',
-  database = 'DBMS_PROJECT'
+  password='Brandy@17',
+  database = 'DBMS_PRO'
 )
 mycursor = mydb.cursor(buffered=True)
 
@@ -498,7 +498,7 @@ def update_user_page():
     upd_res=[None]*len(fields_upd)
     return render_template('update_user_page.html',fields = fields_upd,res = upd_res)
 
-@app.route("/update_user_details",methods = ['GET','POST'])
+@app.route("/update_details",methods = ['GET','POST'])
 def update_details():
     if not session.get('login'):
         return redirect( url_for('home') )
