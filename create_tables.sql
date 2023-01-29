@@ -1,6 +1,6 @@
 CREATE DATABASE DBMS_PRO;
 USE DBMS_PRO;
-
+--for login values
 CREATE TABLE login(
     username VARCHAR(20) NOT NULL,
     password VARCHAR(20) NOT NULL
@@ -33,7 +33,7 @@ CREATE TABLE Organization(
   Organization_ID int NOT NULL,
   Organization_name varchar(20) NOT NULL,
   Location varchar(20),
-  Government_approved int, # 0 or 1
+  Government_approved int,
   PRIMARY KEY(Organization_ID)
 );
 

@@ -375,6 +375,7 @@ def add_Organization():
     try:
         mycursor.execute(qry)
     except:
+
         print("Error : User not Inserted")
         error = True
         success = False
@@ -406,7 +407,8 @@ def add_Organization_phone_no():
     error = False
     try:
         mycursor.execute(qry)
-    except:
+    except Exception as e:
+        print(e)
         print("Error : User not Inserted")
         error = True
         success = False
@@ -1041,73 +1043,73 @@ def seen_message():
 
     return redirect(url_for('see_messages'))
 
-@app.route('/statistics', methods=['GET','POST'])
-def stats():
-    if not session.get('login') or not session.get('isAdmin'):
-        return redirect( url_for('home') )
-    qry = "select organ_donated, count(Donor_ID) from Donor group by organ_donated"
-    mycursor.execute(qry)
-    stats_donor = mycursor.fetchall()
-    A = []
-    B = []
-    for organ in stats_donor:
-        A.append(organ[0])
-        B.append(organ[1])
-    plt.pie(B, labels = A)
-    plt.savefig('./static/donor_stat.png')
-    # plt.show()
-    plt.close()
-    A.clear()
-    B.clear()
-    qry = "select organ_req, count(Patient_Id) from Patient group by organ_req"
-    mycursor.execute(qry)
-    stats_patient = mycursor.fetchall()
-    A = []
-    B = []
-    for Patient in stats_patient:
-        A.append(Patient[0])
-        B.append(Patient[1])
-    plt.pie(B, labels = A)
-    plt.savefig('./static/Patient_stat.jpeg')
-    # plt.show()
-    plt.close()
-    qry = "select distinct Organ_donated from Transaction inner join Donor on Transaction.Donor_ID = Donor.Donor_ID"
-    mycursor.execute(qry)
-    list = mycursor.fetchall()
-    organ_list = []
-    for organ in list:
-        print(organ)
-        organ_list.append(organ[0])
-    print(organ)
-    A.clear()
-    B.clear()
-    for organ in organ_list:
-        qry = "select count(*) from Transaction inner join Donor on Donor.Donor_ID = Transaction.Donor_ID where Organ_donated = '%s' and Status = 1" %organ
-        print(qry)
-        mycursor.execute(qry)
-        a = mycursor.fetchone()
-        A.append(a[0])
-        qry = "select count(*) from Transaction inner join Donor on Donor.Donor_ID = Transaction.Donor_ID where Organ_donated = '%s' and Status = 0" %organ
-        print(qry)
-        mycursor.execute(qry)
-        b = mycursor.fetchone()
-        B.append(b[0])
-    print(A)
-    print(B)
-    print(organ_list)
-    N = len(organ_list)
-    fig, ax = plt.subplots()
-    ind = np.arange(N)
-    width = 0.05
-    plt.bar(ind, A, width, label='SUCCESS')
-    plt.bar(ind + width, B, width,label='FAILURE')
-    plt.ylabel('Number of transplantation')
-    plt.xlabel('Organ')
-    plt.title('SUCCESS V/S FAILURE IN ORGAN TRANSPLANTATION')
-    plt.xticks(ind + width / 2, organ_list)
-    plt.legend(loc='best')
-    plt.savefig('./static/success.jpeg')
-    return render_template('statistics.html')
+# @app.route('/statistics', methods=['GET','POST'])
+# def stats():
+#     if not session.get('login') or not session.get('isAdmin'):
+#         return redirect( url_for('home') )
+#     qry = "select organ_donated, count(Donor_ID) from Donor group by organ_donated"
+#     mycursor.execute(qry)
+#     stats_donor = mycursor.fetchall()
+#     A = []
+#     B = []
+#     for organ in stats_donor:
+#         A.append(organ[0])
+#         B.append(organ[1])
+#     plt.pie(B, labels = A)
+#     plt.savefig('./static/donor_stat.png')
+#     # plt.show()
+#     plt.close()
+#     A.clear()
+#     B.clear()
+#     qry = "select organ_req, count(Patient_Id) from Patient group by organ_req"
+#     mycursor.execute(qry)
+#     stats_patient = mycursor.fetchall()
+#     A = []
+#     B = []
+#     for Patient in stats_patient:
+#         A.append(Patient[0])
+#         B.append(Patient[1])
+#     plt.pie(B, labels = A)
+#     plt.savefig('./static/Patient_stat.jpeg')
+#     # plt.show()
+#     plt.close()
+#     qry = "select distinct Organ_donated from Transaction inner join Donor on Transaction.Donor_ID = Donor.Donor_ID"
+#     mycursor.execute(qry)
+#     list = mycursor.fetchall()
+#     organ_list = []
+#     for organ in list:
+#         print(organ)
+#         organ_list.append(organ[0])
+#     print(organ)
+#     A.clear()
+#     B.clear()
+#     for organ in organ_list:
+#         qry = "select count(*) from Transaction inner join Donor on Donor.Donor_ID = Transaction.Donor_ID where Organ_donated = '%s' and Status = 1" %organ
+#         print(qry)
+#         mycursor.execute(qry)
+#         a = mycursor.fetchone()
+#         A.append(a[0])
+#         qry = "select count(*) from Transaction inner join Donor on Donor.Donor_ID = Transaction.Donor_ID where Organ_donated = '%s' and Status = 0" %organ
+#         print(qry)
+#         mycursor.execute(qry)
+#         b = mycursor.fetchone()
+#         B.append(b[0])
+#     print(A)
+#     print(B)
+#     print(organ_list)
+#     N = len(organ_list)
+#     fig, ax = plt.subplots()
+#     ind = np.arange(N)
+#     width = 0.05
+#     plt.bar(ind, A, width, label='SUCCESS')
+#     plt.bar(ind + width, B, width,label='FAILURE')
+#     plt.ylabel('Number of transplantation')
+#     plt.xlabel('Organ')
+#     plt.title('SUCCESS V/S FAILURE IN ORGAN TRANSPLANTATION')
+#     plt.xticks(ind + width / 2, organ_list)
+#     plt.legend(loc='best')
+#     plt.savefig('./static/success.jpeg')
+#     return render_template('statistics.html')
 
 if __name__ == "__main__":
     app.secret_key = 'sec key'
